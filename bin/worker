@@ -1,0 +1,43 @@
+#!/usr/bin/env node
+
+// these blanks run happn-cluster instances or clients
+
+/*
+
+ If not using ../init/*.conf from upstart
+
+ 3 test clients, (osx)
+
+ PASSWORD=secret \
+ WORKER_ID=worker1 \
+ IFACE=en0 \
+ PROXY_BASE_PORT=45000 \
+ SWIM_BASE_PORT=46000 \
+ HAPPN_BASE_PORT=47000 \
+ MONGO_URL=mongodb://127.0.0.1:27017/test-cluster \
+ MONGO_COLLECTION=test-cluster \
+ bin/worker
+
+ PASSWORD=secret \
+ WORKER_ID=worker2 \
+ IFACE=en0 \
+ PROXY_BASE_PORT=35000 \
+ SWIM_BASE_PORT=36000 \
+ HAPPN_BASE_PORT=37000 \
+ MONGO_URL=mongodb://127.0.0.1:27017/test-cluster \
+ MONGO_COLLECTION=test-cluster \
+ bin/worker
+
+ PASSWORD=secret \
+ WORKER_ID=worker3 \
+ IFACE=en0 \
+ PROXY_BASE_PORT=25000 \
+ SWIM_BASE_PORT=26000 \
+ HAPPN_BASE_PORT=27000 \
+ MONGO_URL=mongodb://127.0.0.1:27017/test-cluster \
+ MONGO_COLLECTION=test-cluster \
+ bin/worker
+
+ */
+
+require('../lib/worker');

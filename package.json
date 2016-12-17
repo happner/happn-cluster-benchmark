@@ -1,0 +1,24 @@
+{
+  "name": "happn-cluster-conductor",
+  "version": "1.0.0",
+  "description": "Conduct a set of cluster nodes to perform benchmark activities and accumulate results to and from a central location.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/happner/happn-cluster-conductor.git"
+  },
+  "author": "",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/happner/happn-cluster-conductor/issues"
+  },
+  "homepage": "https://github.com/happner/happn-cluster-conductor#readme",
+  "dependencies": {
+    "bluebird": "^3.4.6",
+    "happn-cluster": "^2.0.5",
+    "happn-service-mongo-2": "0.0.2"
+  }
+}

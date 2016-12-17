@@ -1,3 +1,14 @@
 #!/usr/bin/env node
 
+/*
+
+  If not using ../init/*.conf from upstart
+
+  1 test server, (osx)
+
+  PASSWORD=secret \
+  bin/server
+
+*/
+
 require('../lib/server');

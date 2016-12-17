@@ -10,6 +10,8 @@ All nodes using ubuntu 14:04 (or any with upstart)
 
 ### create mongo server
 
+create only one
+
 ```bash
 sudo -s
 apt-get update
@@ -28,6 +30,44 @@ ifconfig eth0
 ```
 
 ### create conductor server
+
+create only one
+
+```bash
+sudo -s
+apt-get update
+apt-get install git build-essential -y
+
+# install nodejs
+# https://nodejs.org/en/download/package-manager/#debian-and-ubuntu-based-linux-distributions (for updates to below)
+
+curl -sL https://deb.nodesource.com/setup_6.x | sudo -E bash -
+apt-get install nodejs
+node --version
+
+# create user to run cluster as
+
+adduser --disabled-password happn
+
+# install cluster software (as user)
+
+su happn
+cd ~/
+git clone https://github.com/happner/happn-cluster-conductor.git # this repo
+cd happn-cluster-conductor/
+openssl req -x509 -newkey rsa:2048 -keyout server.key -out server.cert -nodes -days 3650
+npm install
+exit # back to root
+
+# move the init script into position and adjust
+
+cp /home/happn/happn-cluster-conductor/init/happn-cluster-conductor-server.conf /etc/init
+vi /etc/init/happn-cluster-conductor-server.conf
+```
+
+### create conductor client
+
+Create multiple of these... (one per host)
 
 ```bash
 sudo -s
@@ -52,14 +92,11 @@ cd ~/
 git clone https://github.com/happner/happn-cluster-conductor.git # this repo
 cd happn-cluster-conductor/
 npm install
+openssl req -x509 -newkey rsa:2048 -keyout server.key -out server.cert -nodes -days 3650
 exit # back to root
 
 # move the init script into position and adjust
 
-cp /home/happn/happn-cluster-conductor/init/happn-cluster.conf /etc/init
-vi /etc/init/happn-cluster.conf
+cp /home/happn/happn-cluster-conductor/init/happn-cluster-conductor-client.conf /etc/init
+vi /etc/init/happn-cluster-conductor-client.conf
 ```
-
-### create conductor client
-
-Create multiple of these... (one client per host)
