@@ -1,6 +1,6 @@
-# happn-cluster-conductor
+# happn-cluster-benchmark
 
-Conduct a set of cluster nodes to perform benchmark activities and accumulate results to and from a central location.
+Conduct a set of cluster nodes (wokers) to perform benchmark activities and accumulate results to and from a central location (conductor).
 
 ## Setup
 
@@ -29,7 +29,7 @@ netstat -an | grep 27017 # confim listening 0.0.0.0
 ifconfig eth0
 ```
 
-### create conductor server
+### create benchmark conductor 
 
 create only one
 
@@ -53,19 +53,18 @@ adduser --disabled-password happn
 
 su happn
 cd ~/
-git clone https://github.com/happner/happn-cluster-conductor.git # this repo
-cd happn-cluster-conductor/
-openssl req -x509 -newkey rsa:2048 -keyout server.key -out server.cert -nodes -days 3650
+git clone https://github.com/happner/happn-cluster-benchmark.git # this repo
+cd happn-cluster-benchmark/
 npm install
 exit # back to root
 
 # move the init script into position and adjust
 
-cp /home/happn/happn-cluster-conductor/init/happn-cluster-conductor-server.conf /etc/init
-vi /etc/init/happn-cluster-conductor-server.conf
+cp /home/happn/happn-cluster-benchmark/init/happn-cluster-benchmark-conductor.conf /etc/init
+vi /etc/init/happn-cluster-benchmark-conductor.conf
 ```
 
-### create conductor client
+### create benchmark worker 
 
 Create multiple of these... (one per host)
 
@@ -89,14 +88,13 @@ adduser --disabled-password happn
 
 su happn
 cd ~/
-git clone https://github.com/happner/happn-cluster-conductor.git # this repo
-cd happn-cluster-conductor/
+git clone https://github.com/happner/happn-cluster-benchmark.git # this repo
+cd happn-cluster-benchmark/
 npm install
-openssl req -x509 -newkey rsa:2048 -keyout server.key -out server.cert -nodes -days 3650
 exit # back to root
 
 # move the init script into position and adjust
 
-cp /home/happn/happn-cluster-conductor/init/happn-cluster-conductor-client.conf /etc/init
-vi /etc/init/happn-cluster-conductor-client.conf
+cp /home/happn/happn-cluster-benchmark/init/happn-cluster-benchmark-worker.conf /etc/init
+vi /etc/init/happn-cluster-benchmark-worker.conf
 ```

@@ -1,21 +1,21 @@
 {
-  "name": "happn-cluster-conductor",
+  "name": "happn-cluster-benchmark",
   "version": "1.0.0",
-  "description": "Conduct a set of cluster nodes to perform benchmark activities and accumulate results to and from a central location.",
+  "description": "Conduct a set of cluster nodes (wokers) to perform benchmark activities and accumulate results to and from a central location (conductor).",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/happner/happn-cluster-conductor.git"
+    "url": "git+https://github.com/happner/happn-cluster-benchmark.git"
   },
   "author": "",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/happner/happn-cluster-conductor/issues"
+    "url": "https://github.com/happner/happn-cluster-benchmark/issues"
   },
-  "homepage": "https://github.com/happner/happn-cluster-conductor#readme",
+  "homepage": "https://github.com/happner/happn-cluster-benchmark#readme",
   "dependencies": {
     "bluebird": "^3.4.6",
     "happn-cluster": "^2.0.5",

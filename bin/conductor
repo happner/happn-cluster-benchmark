@@ -1,0 +1,14 @@
+#!/usr/bin/env node
+
+/*
+
+ If not using ../init/*.conf from upstart
+
+ 1 test conductor, (osx)
+
+ PASSWORD=secret \
+ bin/conductor
+
+ */
+
+require('../lib/conductor');
