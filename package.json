@@ -18,6 +18,7 @@
   "homepage": "https://github.com/happner/happn-cluster-benchmark#readme",
   "dependencies": {
     "bluebird": "^3.4.6",
+    "clone": "^2.1.0",
     "happn-cluster": "^2.0.5",
     "happn-service-mongo-2": "0.0.2",
     "shortid": "^2.2.6"
