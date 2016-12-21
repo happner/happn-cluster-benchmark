@@ -62,6 +62,7 @@ exit # back to root
 
 cp /home/happn/happn-cluster-benchmark/init/happn-cluster-benchmark-conductor.conf /etc/init
 vi /etc/init/happn-cluster-benchmark-conductor.conf
+start happn-cluster-benchmark-conductor
 ```
 
 ### create benchmark worker 
@@ -99,6 +100,7 @@ exit # back to root
 
 cp /home/happn/happn-cluster-benchmark/init/happn-cluster-benchmark-worker.conf /etc/init
 vi /etc/init/happn-cluster-benchmark-worker.conf
+start happn-cluster-benchmark-worker
 ```
 
 
