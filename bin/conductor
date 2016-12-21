@@ -4,7 +4,7 @@
 
  If not using ../init/*.conf from upstart
 
- 1 test conductor, (osx)
+ 1 run conductor, (osx)
 
  PASSWORD=secret \
  bin/conductor

@@ -10,7 +10,7 @@ All nodes using ubuntu 14:04 (or any with upstart)
 
 ### create mongo server
 
-create only one
+create mongodb on separate server
 
 ```bash
 sudo -s
@@ -31,7 +31,7 @@ ifconfig eth0
 
 ### create benchmark conductor 
 
-create only one
+create only one conductor on separate server
 
 ```bash
 sudo -s
@@ -66,7 +66,9 @@ vi /etc/init/happn-cluster-benchmark-conductor.conf
 
 ### create benchmark worker 
 
-Create multiple of these... (one per host)
+Create multiple of these... (one per server)
+
+Suggestion: create aws image and then spawn multiple servers from that "AMI".
 
 ```bash
 sudo -s
@@ -98,3 +100,49 @@ exit # back to root
 cp /home/happn/happn-cluster-benchmark/init/happn-cluster-benchmark-worker.conf /etc/init
 vi /etc/init/happn-cluster-benchmark-worker.conf
 ```
+
+
+
+## Usage
+
+Start benchmark run using runner from bash shell
+
+```bash
+ bin/runner \
+ --conductor-url=https://localhost:55000 \
+ --conductor-secret=secret \
+ --spawn-concurrency=3 \
+ --cluster-size=3 \
+ --client-count=20 \
+ --stop-after-seconds=5 \
+ --client-script=00-client \
+ --script-param-custom1=xxx \
+ --script-param-custom2=xxx \
+ --output=file.json
+```
+
+#### --spawn-concurrency
+
+When spawning a large cluster with all node concurrently, SWIM fails to disseminate properly - this limits the number of cluster nodes being spawned at once.
+
+#### --cluster-size
+
+Number of happn-cluster servers in the cluster spread evenly across all workers. 
+
+see  `lib/worker/startClusterSeed` , `lib/worker/startClusterNode` 
+
+#### --client-count
+
+Number of happn-3 clients to spawn and login to a node in the cluster, spread evenly across all workers and cluster nodes.
+
+#### --stop-after-seconds
+
+Allow to for test script to run. Starts counting only after all clients have started.
+
+#### --client-script
+
+Which script to run. Script has access to the logged-in hapn client and facilities to relay results back to the conductor. See  `lib/worker/00-client` example.
+
+#### --script-param-custom1
+
+Custom parameter for specified benchmark script.

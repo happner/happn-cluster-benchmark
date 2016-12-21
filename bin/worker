@@ -6,7 +6,7 @@
 
  If not using ../init/*.conf from upstart
 
- 3 test clients, (osx)
+ 3 run clients, (osx)
 
  PASSWORD=secret \
  WORKER_ID=worker1 \
@@ -14,8 +14,8 @@
  PROXY_BASE_PORT=45000 \
  SWIM_BASE_PORT=46000 \
  HAPPN_BASE_PORT=47000 \
- MONGO_URL=mongodb://127.0.0.1:27017/test-cluster \
- MONGO_COLLECTION=test-cluster \
+ MONGO_URL=mongodb://127.0.0.1:27017/run-cluster \
+ MONGO_COLLECTION=run-cluster \
  bin/worker
 
  PASSWORD=secret \
@@ -24,8 +24,8 @@
  PROXY_BASE_PORT=35000 \
  SWIM_BASE_PORT=36000 \
  HAPPN_BASE_PORT=37000 \
- MONGO_URL=mongodb://127.0.0.1:27017/test-cluster \
- MONGO_COLLECTION=test-cluster \
+ MONGO_URL=mongodb://127.0.0.1:27017/run-cluster \
+ MONGO_COLLECTION=run-cluster \
  bin/worker
 
  PASSWORD=secret \
@@ -34,8 +34,8 @@
  PROXY_BASE_PORT=25000 \
  SWIM_BASE_PORT=26000 \
  HAPPN_BASE_PORT=27000 \
- MONGO_URL=mongodb://127.0.0.1:27017/test-cluster \
- MONGO_COLLECTION=test-cluster \
+ MONGO_URL=mongodb://127.0.0.1:27017/run-cluster \
+ MONGO_COLLECTION=run-cluster \
  bin/worker
 
  */

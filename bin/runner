@@ -1,0 +1,167 @@
+#!/usr/bin/env node
+
+// single entry-point for testing
+
+/*
+
+ General usage
+ =============
+
+ bin/runner \
+ --conductor-url=https://localhost:55000 \
+ --conductor-secret=secret \
+ --spawn-concurrency=3 \
+ --cluster-size=3 \
+ --client-count=20 \
+ --stop-after-seconds=5 \
+ --client-script=00-client \
+ --script-param-custom1=xxx \
+ --script-param-custom2=xxx \
+ --output=file.json
+
+
+ 00-script (see lib/worker directory)
+ ====================================
+
+ bin/runner \
+ --conductor-url=https://localhost:55000 \
+ --conductor-secret=secret \
+ --spawn-concurrency=3 \
+ --cluster-size=3 \
+ --client-count=20 \
+ --stop-after-seconds=5 \
+ --client-script=00-client \
+ --script-param-message-interval=1000 \
+ --script-param-message-increment-interval=60000 \
+ --script-param-increment=-25 \
+ --script-param-averager-window-size=20 \
+ --output=file.json
+
+ */
+
+process.env.DEBUG = process.env.DEBUG || 'runner';
+process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
+
+const Promise = require('bluebird');
+const camelCase = require('camelcase');
+const request = require('request');
+const args = {};
+const debug = require('debug')('runner');
+
+
+// function that returns a promise
+const action = (path, opts) => new Promise((resolve, reject) => {
+  debug('post %s', path);
+
+  let options = {
+    url: args.conductorUrl + path,
+    method: 'POST',
+    headers: {
+      Authorization: args.conductorSecret
+    },
+    json: opts
+  };
+
+  request(options, function (error, response, body) {
+    if (error) {
+      return reject(error);
+    }
+
+    if (response.statusCode == 200) {
+      try {
+        resolve(JSON.parse(body));
+      } catch (e) {
+        resolve(body);
+      }
+      return;
+    }
+
+    return reject(body);
+  });
+});
+
+
+// load args
+
+process.argv
+  .filter(arg => arg.indexOf('--') == 0)
+  .map(arg => arg.split('='))
+  .forEach(([key, value]) => args[camelCase(key)] = value);
+
+
+// perform test sequence
+
+Promise.resolve()
+
+  .then(() => {
+    return action('/start-cluster-seed', {})
+  })
+
+  .then(result => {
+    debug('result %j', result);
+  })
+
+  .then(() => {
+
+    var targets = [];
+    for (let i = 0; i < args.clusterSize - 1; i++) targets[i] = i;
+
+    return Promise.resolve(targets)
+      .map(() => {
+        return new Promise((resolve, reject) => {
+          action('/start-cluster-node', {})
+            .then(result => {
+              debug('result %j', result);
+              resolve();
+            })
+            .catch(reject);
+        })
+      }, {concurrency: parseInt(args.spawnConcurrency || 3)});
+  })
+
+  .then(() => {
+
+    var options = {
+      count: args.clientCount,
+      script: args.clientScript
+    };
+
+    Object.keys(args)
+      .filter(key => key.indexOf('scriptParam') == 0)
+      .forEach(key => {
+        options[key] = args[key];
+      });
+
+    return action('/start-cluster-clients', options);
+  })
+
+  .then(result => {
+    debug('result %j', result);
+  })
+
+  .then(() => {
+    debug('stopping in %d seconds', args.stopAfterSeconds || 0);
+    let stop = args.stopAfterSeconds ? parseInt(args.stopAfterSeconds) * 1000 : 0;
+    return Promise.delay(stop);
+  })
+
+  .then(() => {
+    console.log('stopped');
+  })
+
+  .catch(error => {
+    debug('ERROR1', error);
+  })
+
+  .then(() => {
+    return action('/kill', {})
+  })
+
+  .then(result => {
+    debug('result %j', result);
+  })
+
+  .catch(error => {
+    debug('ERROR2', error);
+  })
+
