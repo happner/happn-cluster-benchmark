@@ -114,8 +114,8 @@ Start benchmark run using runner from bash shell
  --spawn-concurrency=3 \
  --cluster-size=3 \
  --client-count=20 \
- --stop-after-seconds=5 \
  --client-script=00-client \
+ --stop-after-seconds=5 \
  --script-param-custom1=xxx \
  --script-param-custom2=xxx \
  --output=file.json
@@ -135,13 +135,13 @@ see  `lib/worker/startClusterSeed` , `lib/worker/startClusterNode`
 
 Number of happn-3 clients to spawn and login to a node in the cluster, spread evenly across all workers and cluster nodes.
 
-#### --stop-after-seconds
-
-Allow to for test script to run. Starts counting only after all clients have started.
-
 #### --client-script
 
 Which script to run. Script has access to the logged-in hapn client and facilities to relay results back to the conductor. See  `lib/worker/00-client` example.
+
+#### --stop-after-seconds
+
+Allow time for benchmark script to run. Starts counting only after all clients have started.
 
 #### --script-param-custom1
 

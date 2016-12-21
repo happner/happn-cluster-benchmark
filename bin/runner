@@ -13,8 +13,8 @@
  --spawn-concurrency=3 \
  --cluster-size=3 \
  --client-count=20 \
- --stop-after-seconds=5 \
  --client-script=00-client \
+ --stop-after-seconds=5 \
  --script-param-custom1=xxx \
  --script-param-custom2=xxx \
  --output=file.json
@@ -29,8 +29,8 @@
  --spawn-concurrency=3 \
  --cluster-size=3 \
  --client-count=20 \
- --stop-after-seconds=5 \
  --client-script=00-client \
+ --stop-after-seconds=5 \
  --script-param-message-interval=1000 \
  --script-param-message-increment-interval=60000 \
  --script-param-increment=-25 \
