@@ -146,3 +146,10 @@ Allow time for benchmark script to run. Starts counting only after all clients h
 #### --script-param-custom1
 
 Custom parameter for specified benchmark script.
+
+
+
+## Usage (laptop)
+
+Start one conductor and multiple workers per instructions in `bin/*` and then proceed as above.
+
