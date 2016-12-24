@@ -2,19 +2,86 @@
 
 /*
 
-  Usage
-  -----
+ Usage
+ -----
 
-  bin/02-client-json-2-csv file.json > file.csv
+ bin/02-client-json-2-csv file.json > file.csv
 
  */
 
 const file = process.cwd() + '/' + process.argv[2];
 const data = require(file);
 
-console.log(data);
 
-const clientKeys = Object.keys(data.clients);
-const clientCount = clientKeys.length;
+const serverCount = data.servers;
+const clientKeys = Object.keys(data.clients)
+const clientClount = clientKeys.length;
+const sort = {};
 
-console.log(clientCount);
+/*
+ [
+ 0 - report interval
+ 1 - sending interval,
+ 2 - receiving interval,
+ 3 - round-trip lag,
+ 4 - sent per second,
+ 5 - received per second,
+ 6 - set errors per second
+ ]
+ */
+
+clientKeys.forEach(key => {
+  let clientData = data.clients[key].data;
+  for (let i = 0; i < clientData.length; i++) {
+    let sendingInterval = clientData[i][1];
+    sort[sendingInterval] = sort[sendingInterval] || [];
+    sort[sendingInterval].push(clientData[i]);
+  }
+});
+
+const sendingIntervals = Object.keys(sort).reverse();
+
+console.log('servers, clients, samples, sending-interval(ms), receiving-interval(ms), receiving-lag(ms), sent-per-second, received-per-second, errors-per-second');
+
+sendingIntervals.forEach(sendingInterval => {
+  let sampleSet = sort[sendingInterval];
+
+  let sampleCount = sampleSet.length;
+
+  let receivingInterval = [];
+  let receivingLag = [];
+  let sentPerSecond = [];
+  let receivedPerSecond = [];
+  let errorPerSecond = [];
+
+  sampleSet.forEach(sampleRow => {
+    receivingInterval.push(sampleRow[2]);
+    receivingLag.push(sampleRow[3]);
+    sentPerSecond.push(sampleRow[4]);
+    receivedPerSecond.push(sampleRow[5]);
+    errorPerSecond.push(sampleRow[6]);
+  });
+
+  receivingInterval = receivingInterval.reduce((a, b) => a + b) / receivingInterval.length;
+  receivingLag = receivingLag.reduce((a, b) => a + b) / receivingLag.length;
+  sentPerSecond = sentPerSecond.reduce((a, b) => a + b) / sentPerSecond.length;
+  receivedPerSecond = receivedPerSecond.reduce((a, b) => a + b) / receivedPerSecond.length;
+  errorPerSecond = errorPerSecond.reduce((a, b) => a + b) / errorPerSecond.length;
+
+  console.log('%d, %d, %d, %d, %d, %d, %d, %d, %d',
+    serverCount,
+    clientClount,
+    sampleCount,
+    parseInt(sendingInterval),
+    round(receivingInterval),
+    round(receivingLag),
+    round(sentPerSecond),
+    round(receivedPerSecond),
+    round(errorPerSecond)
+  );
+
+});
+
+function round(value) {
+  return Math.round(value * 100) / 100
+}
