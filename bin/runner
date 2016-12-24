@@ -13,28 +13,33 @@
  --spawn-concurrency=3 \
  --cluster-size=3 \
  --client-count=20 \
- --client-script=00-client \
+ --client-groups=4 \
+ --client-script=01-example \
  --stop-after-seconds=5 \
  --script-param-custom1=xxx \
  --script-param-custom2=xxx \
  --output=file.json
 
 
- 00-script (see lib/worker directory)
+ 02-script (see lib/worker directory)
  ====================================
 
  bin/runner \
  --conductor-url=https://localhost:55000 \
  --conductor-secret=secret \
  --spawn-concurrency=3 \
- --cluster-size=3 \
+ --cluster-size=1 \
  --client-count=20 \
- --client-script=00-client \
- --stop-after-seconds=5 \
- --script-param-message-interval=1000 \
- --script-param-message-increment-interval=60000 \
- --script-param-increment=-25 \
+ --client-groups=4 \
+ --client-script=02-client \
+ --stop-after-seconds=15 \
+ --script-param-message-interval=200 \
+ --script-param-message-increment-interval=2000 \
+ --script-param-increment=-10 \
+ --script-param-report-interval=1000 \
  --script-param-averager-window-size=20 \
+ --script-param-payload-size=1000 \
+ --script-param-no-store=1 \
  --output=file.json
 
  */
@@ -45,9 +50,9 @@ process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
 const Promise = require('bluebird');
 const camelCase = require('camelcase');
 const request = require('request');
+const fs = require('fs');
 const args = {};
 const debug = require('debug')('runner');
-
 
 // function that returns a promise
 const action = (path, opts) => new Promise((resolve, reject) => {
@@ -78,6 +83,18 @@ const action = (path, opts) => new Promise((resolve, reject) => {
 
     return reject(body);
   });
+});
+
+process.on('SIGINT', () => {
+  console.log();
+  return action('/kill', {})
+    .then(result => {
+      debug('result %j', result);
+      process.exit(0);
+    })
+    .catch(error => {
+      debug('ERROR', error);
+    });
 });
 
 
@@ -123,19 +140,24 @@ Promise.resolve()
 
     var options = {
       count: args.clientCount,
-      script: args.clientScript
+      script: args.clientScript,
+      groups: args.clientGroups
     };
 
     Object.keys(args)
       .filter(key => key.indexOf('scriptParam') == 0)
       .forEach(key => {
-        options[key] = args[key];
+        let newKey = key.replace('scriptParam', '');
+        options[camelCase(newKey)] = args[key];
       });
 
     return action('/start-cluster-clients', options);
   })
 
   .then(result => {
+    if (!result.ok) {
+      throw result;
+    }
     debug('result %j', result);
   })
 
@@ -145,23 +167,33 @@ Promise.resolve()
     return Promise.delay(stop);
   })
 
-  .then(() => {
-    console.log('stopped');
-  })
-
   .catch(error => {
     debug('ERROR1', error);
   })
 
   .then(() => {
-    return action('/kill', {})
+    return action('/kill', {});
   })
 
   .then(result => {
     debug('result %j', result);
   })
 
+  .then(() => {
+    debug('awaiting last few results');
+    return Promise.delay(1000);
+  })
+
+  .then(() => {
+    return action('/results');
+  })
+
+  .then(results => {
+    debug('writing file %s', args.output);
+    fs.writeFileSync(args.output, JSON.stringify(results, null, 2));
+  })
+
   .catch(error => {
     debug('ERROR2', error);
-  })
+  });
 

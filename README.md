@@ -2,7 +2,64 @@
 
 Conduct a set of cluster nodes (wokers) to perform benchmark activities and accumulate results to and from a central location (conductor).
 
-## Setup
+## Usage
+
+Start benchmark run using runner from bash shell
+
+```bash
+ bin/runner \
+ --conductor-url=https://localhost:55000 \
+ --conductor-secret=secret \
+ --spawn-concurrency=3 \
+ --cluster-size=3 \
+ --client-count=20 \
+ --client-groups=4 \
+ --client-script=01-example \
+ --stop-after-seconds=5 \
+ --script-param-custom1=xxx \
+ --script-param-custom2=xxx \
+ --output=file.json
+```
+
+#### --spawn-concurrency
+
+When spawning a large cluster with all node concurrently, SWIM fails to disseminate properly - this limits the number of cluster nodes being spawned at once.
+
+#### --cluster-size
+
+Number of happn-cluster servers in the cluster spread evenly across all workers. 
+
+see  `lib/worker/startClusterSeed` , `lib/worker/startClusterNode` 
+
+#### --client-count
+
+Number of happn-3 clients to spawn and login to a node in the cluster, spread evenly across all workers and cluster nodes.
+
+#### --client-groups
+
+Clients with be spread into groups. Script receives group name in `data.options.group`.
+
+#### --client-script
+
+Which script to run. Script has access to the logged-in hapn client and facilities to relay results back to the conductor. See  `lib/worker/01-example` example.
+
+#### --stop-after-seconds
+
+Allow time for benchmark script to run. Starts counting only after all clients have started.
+
+#### --script-param-custom1
+
+Custom parameter for specified benchmark script.
+
+
+
+## Usage (laptop)
+
+Start one conductor and multiple workers per instructions in `bin/*` and then proceed as above.
+
+
+
+## Setup (eg AWS)
 
 Ensure all necessary ports are accessible between nodes ([see similar aws example](https://github.com/happner/happn-cluster-aws-example#step-1-create-aws-security-groups))
 
@@ -104,54 +161,4 @@ start happn-cluster-benchmark-worker
 ```
 
 
-
-## Usage
-
-Start benchmark run using runner from bash shell
-
-```bash
- bin/runner \
- --conductor-url=https://localhost:55000 \
- --conductor-secret=secret \
- --spawn-concurrency=3 \
- --cluster-size=3 \
- --client-count=20 \
- --client-script=00-client \
- --stop-after-seconds=5 \
- --script-param-custom1=xxx \
- --script-param-custom2=xxx \
- --output=file.json
-```
-
-#### --spawn-concurrency
-
-When spawning a large cluster with all node concurrently, SWIM fails to disseminate properly - this limits the number of cluster nodes being spawned at once.
-
-#### --cluster-size
-
-Number of happn-cluster servers in the cluster spread evenly across all workers. 
-
-see  `lib/worker/startClusterSeed` , `lib/worker/startClusterNode` 
-
-#### --client-count
-
-Number of happn-3 clients to spawn and login to a node in the cluster, spread evenly across all workers and cluster nodes.
-
-#### --client-script
-
-Which script to run. Script has access to the logged-in hapn client and facilities to relay results back to the conductor. See  `lib/worker/00-client` example.
-
-#### --stop-after-seconds
-
-Allow time for benchmark script to run. Starts counting only after all clients have started.
-
-#### --script-param-custom1
-
-Custom parameter for specified benchmark script.
-
-
-
-## Usage (laptop)
-
-Start one conductor and multiple workers per instructions in `bin/*` and then proceed as above.
 
