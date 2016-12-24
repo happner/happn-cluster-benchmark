@@ -1,0 +1,20 @@
+#!/usr/bin/env node
+
+/*
+
+  Usage
+  -----
+
+  bin/02-client-json-2-csv file.json > file.csv
+
+ */
+
+const file = process.cwd() + '/' + process.argv[2];
+const data = require(file);
+
+console.log(data);
+
+const clientKeys = Object.keys(data.clients);
+const clientCount = clientKeys.length;
+
+console.log(clientCount);
