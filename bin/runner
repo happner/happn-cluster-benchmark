@@ -32,10 +32,10 @@
  --client-count=20 \
  --client-groups=4 \
  --client-script=02-client \
- --stop-after-seconds=15 \
- --script-param-message-interval=200 \
- --script-param-message-increment-interval=2000 \
- --script-param-increment=-10 \
+ --stop-after-seconds=25 \
+ --script-param-message-start-frequency=1 \
+ --script-param-message-increment-frequency-by=3 \
+ --script-param-message-increment-interval=5000 \
  --script-param-report-interval=1000 \
  --script-param-averager-window-size=20 \
  --script-param-payload-size=1000 \
