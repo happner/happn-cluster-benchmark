@@ -1,6 +1,12 @@
 ## Benchmark
 
-#### Test 1
+### Bench 1
+
+1 server
+
+200 clients
+
+10 groups
 
 ```bash
 bin/runner \
@@ -8,30 +14,31 @@ bin/runner \
  --conductor-secret=aiph2Boh \
  --spawn-concurrency=3 \
  --cluster-size=1 \
- --client-count=1 \
- --client-groups=4 \
+ --client-count=200 \
+ --client-groups=10 \
  --client-script=02-client \
- --stop-after-seconds=5 \
- --script-param-message-interval=200 \
- --script-param-message-increment-interval=2000 \
- --script-param-increment=-10 \
- --script-param-report-interval=1000 \
+ --stop-after-seconds=420 \
+ --script-param-message-interval=1000 \
+ --script-param-message-increment-interval=10000 \
+ --script-param-increment=-25 \
+ --script-param-report-interval=2000 \
  --script-param-averager-window-size=20 \
- --script-param-payload-size=1000 \
+ --script-param-payload-size=200 \
  --script-param-no-store=1 \
- --output=file.json
+ --output=bench1.json
 ```
 
-Find servers
+### 
 
-```bash
-curl \
- -k \
- -H "Authorization: aiph2Boh" \
- https://conductor:55000/status > status.json
- 
-grep -A 10 startCluster status.json
-```
+
+
+
+
+
+
+
+
+
 
 
 
@@ -173,35 +180,5 @@ bin/runner \
  --script-param-payload-size=200 \
  --script-param-no-store=1 \
  --output=bench5.json
-```
-
-### Bench 5 - mongo
-
-20 servers
-
-200 clients
-
-10 groups
-
-noStore off
-
-```bash
-bin/runner \
- --conductor-url=https://conductor:55000 \
- --conductor-secret=aiph2Boh \
- --spawn-concurrency=3 \
- --cluster-size=20 \
- --client-count=200 \
- --client-groups=10 \
- --client-script=02-client \
- --stop-after-seconds=420 \
- --script-param-message-interval=1000 \
- --script-param-message-increment-interval=10000 \
- --script-param-increment=-25 \
- --script-param-report-interval=2000 \
- --script-param-averager-window-size=20 \
- --script-param-payload-size=200 \
- --script-param-no-store=0 \
- --output=bench5-mongo.json
 ```
 

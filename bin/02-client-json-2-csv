@@ -41,7 +41,7 @@ clientKeys.forEach(key => {
 
 const sendingIntervals = Object.keys(sort).reverse();
 
-console.log('servers, clients, samples, sending-interval(ms), receiving-interval(ms), receiving-lag(ms), sent-per-second, received-per-second, errors-per-second');
+console.log('servers, clients, samples, messages-per-second, sending-interval(ms), receiving-interval(ms), receiving-lag(ms), sent-per-second, received-per-second, errors-per-second');
 
 sendingIntervals.forEach(sendingInterval => {
   let sampleSet = sort[sendingInterval];
@@ -68,10 +68,11 @@ sendingIntervals.forEach(sendingInterval => {
   receivedPerSecond = receivedPerSecond.reduce((a, b) => a + b) / receivedPerSecond.length;
   errorPerSecond = errorPerSecond.reduce((a, b) => a + b) / errorPerSecond.length;
 
-  console.log('%d, %d, %d, %d, %d, %d, %d, %d, %d',
+  console.log('%d, %d, %d, %d, %d, %d, %d, %d, %d, %d',
     serverCount,
     clientClount,
     sampleCount,
+    round(1000 / sendingInterval * 200),
     parseInt(sendingInterval),
     round(receivingInterval),
     round(receivingLag),
