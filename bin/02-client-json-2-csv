@@ -33,7 +33,7 @@ const sort = {};
 clientKeys.forEach(key => {
   let clientData = data.clients[key].data;
   for (let i = 0; i < clientData.length; i++) {
-    let sendingInterval = clientData[i][1];
+    let sendingInterval = Math.round(clientData[i][1]);
     sort[sendingInterval] = sort[sendingInterval] || [];
     sort[sendingInterval].push(clientData[i]);
   }
@@ -41,7 +41,7 @@ clientKeys.forEach(key => {
 
 const sendingIntervals = Object.keys(sort).reverse();
 
-console.log('servers, clients, samples, messages-per-second, sending-interval(ms), receiving-interval(ms), receiving-lag(ms), sent-per-second, received-per-second, errors-per-second');
+console.log('servers, clients, samples, sending-interval(ms), messages-per-second, receiving-interval(ms), receiving-lag(ms), sent-per-second, received-per-second, errors-per-second');
 
 sendingIntervals.forEach(sendingInterval => {
   let sampleSet = sort[sendingInterval];
@@ -72,8 +72,8 @@ sendingIntervals.forEach(sendingInterval => {
     serverCount,
     clientClount,
     sampleCount,
-    round(1000 / sendingInterval * 200),
     parseInt(sendingInterval),
+    round(1000 / sendingInterval * 200),
     round(receivingInterval),
     round(receivingLag),
     round(sentPerSecond),
