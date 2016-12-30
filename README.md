@@ -12,7 +12,8 @@ Start benchmark run using runner from bash shell
  --conductor-secret=secret \
  --spawn-concurrency=3 \
  --cluster-size=3 \
- --client-count=20 \
+ --use-proxy=1 \
+ --client-count=5 \
  --client-groups=4 \
  --client-script=01-example \
  --stop-after-seconds=5 \

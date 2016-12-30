@@ -12,6 +12,7 @@
  --conductor-secret=secret \
  --spawn-concurrency=3 \
  --cluster-size=3 \
+ --use-proxy=1 \
  --client-count=20 \
  --client-groups=4 \
  --client-script=01-example \
@@ -29,6 +30,7 @@
  --conductor-secret=secret \
  --spawn-concurrency=3 \
  --cluster-size=1 \
+ --use-proxy=1 \
  --client-count=20 \
  --client-groups=4 \
  --client-script=02-client \
@@ -141,7 +143,8 @@ Promise.resolve()
     var options = {
       count: args.clientCount,
       script: args.clientScript,
-      groups: args.clientGroups
+      groups: args.clientGroups,
+      proxy: args.useProxy == '1'
     };
 
     Object.keys(args)
