@@ -144,7 +144,7 @@ Promise.resolve()
       count: args.clientCount,
       script: args.clientScript,
       groups: args.clientGroups,
-      proxy: args.useProxy == '1'
+      noProxy: args.useProxy == '0'
     };
 
     Object.keys(args)
